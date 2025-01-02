@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# Mock mokutil to validate ansible calls.
+#
+# Support only used options with static responses.
+path=$(dirname "${0}")
+echo "$@" >> /tmp/mokutil.log
+
+case "${1}" in
+  --generate-hash*)
+    echo '$6$SALT$FAKEHASH'
+    exit 0
+    ;;
+  --sb-state)
+{% if test_secure_boot %}
+    echo "SecureBoot enabled"
+{% else %}
+    echo "SecureBoot disabled"
+{% endif %}
+    exit 0
+    ;;
+  --timeout*)
+    exit 0
+    ;;
+  --test-key*)
+{% if test_test_key %}
+    echo "$2 is already enrolled"
+    exit 1
+{% else %}
+    echo "$2 is not enrolled"
+    exit 0
+{% endif %}
+    ;;
+  --reset*)
+    exit 0
+    ;;
+  --import*)
+    exit 0
+    ;;
+  --enable-validation*)
+    exit 0
+    ;;
+  --disable-validation*)
+    exit 0
+    ;;
+esac

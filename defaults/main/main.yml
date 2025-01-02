@@ -1,0 +1,115 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Secure Boot Options
+###############################################################################
+# Enable Secure Boot (and DKMS module signing).
+#
+# Secure boot enabled systems require the MOK (Machine Owner's Key) for signed
+# DKMS modules to be loaded into the kernel, otherwise errors like the
+# following will occur:
+#
+# ``` bash
+# /sbin/modprobe zfs
+# > modprobe: ERROR: could not insert 'zfs': Key was rejected by service
+# ```
+#
+# The MOK Manager is loaded from the secure boot shin and confirms the new keys
+# to be loaded. The system will reboot again with the new keys. Read included
+# role documentation for full explanation and use of secure boot and setting up
+# hardware correctly for it.
+#
+# Reference:
+# * https://wiki.debian.org/SecureBoot#DKMS_and_secure_boot
+
+# Secure boot password.
+#
+# Required for modifying secure boot state. This should be a unique password
+# that will be entered on the physical console during the next boot to confirm
+# changes. There is no pre-defined password unless already set; and is set
+# every time a change is queued.
+#
+# During physical user verification secure boot may ask for specific character
+# positions of the password (e.g. Password character 8, etc). This refers to
+# the exact **character** at that position and not the entire password itself.
+#
+# Special Case:
+#   * Must be between 8-16 alphanumeric characters
+#
+# Default: ''.
+secure_boot_password: ''
+
+# Enable signature validation?
+#
+# Enforces signature validation. Requires a reboot and physical console
+# password to confirm changes. Specified keys will automatically be enrolled if
+# not found. Secure boot can be enabled without signature verification.
+#
+# Default: True.
+secure_boot_enable: true
+
+# Clear existing secure boot keys?
+#
+# Removes all user keys from MokManager. Requires separate reboot.
+#
+# Default: False.
+secure_boot_reset: false
+
+# How long MOK manager will wait for physical user before booting OS (seconds).
+#
+# MOK manager will pause booting during the secure boot shim loading process to
+# have a physically present user confirm changes and enrollments. This timeout
+# controls how long MOK manager will wait before resuming the normal boot
+# process.
+#
+# Skipped enrollments are automatically cleared, requiring a new enrollment
+# request.
+#
+# Special Case:
+#   -1: infinite.
+#
+# Default: -1 (infinite).
+secure_boot_manager_timeout: -1
+
+# Max time to wait for system after reboot (seconds).
+#
+# This should be set to a value that which allows ample time for physically
+# entering the secure_boot_password on the hardware console.
+#
+# Reboot **only** occur if there are changes made to secure boot firmware.
+#
+# Default: 600 (5 minutes).
+secure_boot_reboot_timeout: 600
+
+# Halt role instead of rebooting?
+#
+# Secure boot changes should be very infrequent. Halt the role instead of
+# rebooting and waiting for the remote system to come back up.
+#
+# Default: False.
+secure_boot_halt_enable: false
+
+###############################################################################
+# Machine Owner's Keys
+###############################################################################
+
+# Public Machine Owner's Key (MOK).
+#
+# Use vault.
+#
+# Values:
+#    *: custom MOK certificate data - secure_boot_location/ansible_mok.pub
+#   '': use pre-generated MOK certificate data - secure_boot_location/mok.pub
+#
+# Default: '' (use pre-generated key).
+secure_boot_public: ''
+
+# Private Machine Owner's Key (MOK).
+#
+# Required if specifying a custom mok_key_public. Use vault.
+#
+# Default: ''.
+secure_boot_private: ''
+
+# Secure boot key storage location. Default: '/var/lib/dkms'.
+secure_boot_key_location: '/var/lib/dkms'

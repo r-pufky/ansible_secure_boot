@@ -1,0 +1,16 @@
+---
+###############################################################################
+# Secure Boot Testing
+###############################################################################
+# Options exposed specifically for unit testing dependent roles without
+# requiring manual physical user presence steps.
+
+# Enable testing.
+#
+# Injects faux mokutil enabling the testing of secure_boot without the need for
+# a manually operated EFI secure boot enabled VM. Never needed in normal usage.
+#
+# molecule test -- -v -e 'secure_boot_testing_enable=true'
+#
+# Default: False.
+secure_boot_testing_enable: false

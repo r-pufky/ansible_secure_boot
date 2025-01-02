@@ -1,0 +1,25 @@
+---
+# yamllint disable rule:line-length
+- name: 'No actions | converge'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'No actions | converge | inject mock mokutil'
+      ansible.builtin.template:
+        src: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/templates/mokutil.j2'
+        dest: '/usr/bin/mokutil'
+        owner: 'root'
+        group: 'root'
+        mode: '0755'
+      vars:
+        test_secure_boot: false
+        test_test_key: false
+
+    - name: 'No actions | converge | apply r_pufky.srv.secure_boot'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.secure_boot'
+      vars:
+        # remove mokutil package from install
+        secure_boot_role_packages:
+          - 'openssl'
+          - 'dkms'

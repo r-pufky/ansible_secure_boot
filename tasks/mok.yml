@@ -1,0 +1,56 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# MOK Key Management (Machine Owners Key)
+###############################################################################
+# Write custom key if it is defined, generate a new key if it doesn't exist.
+#
+# Key generation uses defaults from Debian DKMS auto generation.
+#
+# Args:
+#   _secure_boot_public: str - location for selected public key
+#   _secure_boot_private: str - location for selected private key
+#
+# Reference:
+# * https://wiki.debian.org/SecureBoot#DKMS_and_secure_boot
+# * https://github.com/jiazhang0/meta-efi-secure-boot/blob/master/README.md#mokutil-and-mok-manager
+# * https://media.defense.gov/2023/Mar/20/2003182401/-1/-1/0/CTR-UEFI-SECURE-BOOT-CUSTOMIZATION-20230317.PDF
+
+- name: 'MOK | write custom key'
+  when: secure_boot_public | length > 0
+  block:
+    - name: 'MOK | write custom key | generate directories'
+      ansible.builtin.file:
+        path: '{{ secure_boot_key_location }}'
+        owner: 'root'
+        group: 'root'
+        mode: '0755'
+        recurse: true
+        state: 'directory'
+      become: true
+
+    - name: 'MOK | write custom key | {{ _secure_boot_private }}'
+      ansible.builtin.file:
+        path: '{{ _secure_boot_private }}'
+        owner: 'root'
+        group: 'root'
+        mode: '0600'
+      become: true
+
+    - name: 'MOK | write custom key | {{ _secure_boot_public }}'
+      ansible.builtin.file:
+        path: '{{ _secure_boot_public }}'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      become: true
+
+- name: 'MOK | query current key state'
+  ansible.builtin.stat:
+    path: '{{ _secure_boot_private }}'
+  register: _secure_boot_key_exists
+
+- name: 'MOK | generate new {{ _secure_boot_private }}'
+  when: not _secure_boot_key_exists.stat.exists
+  ansible.builtin.command: '{{ secure_boot_role_create_mok }} -keyout {{ _secure_boot_private }} -out {{ _secure_boot_public }}'
+  changed_when: true

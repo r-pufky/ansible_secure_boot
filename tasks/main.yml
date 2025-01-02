@@ -1,0 +1,19 @@
+---
+- name: 'Install packages'
+  ansible.builtin.include_role:
+    name: 'r_pufky.srv.apt'
+  vars:
+    apt_packages:
+      - '{{ secure_boot_role_packages }}'
+    apt_package_update_cache: true
+
+- name: 'Prep'
+  ansible.builtin.include_tasks: 'prep.yml'
+- name: 'MOK'
+  ansible.builtin.include_tasks: 'mok.yml'
+- name: 'Enrollment'
+  ansible.builtin.include_tasks: 'enrollment.yml'
+- name: 'Signature validation'
+  ansible.builtin.include_tasks: 'signature_validation.yml'
+- name: 'Reboot'
+  ansible.builtin.include_tasks: 'reboot.yml'

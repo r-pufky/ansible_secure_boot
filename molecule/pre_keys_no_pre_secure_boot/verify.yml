@@ -1,0 +1,30 @@
+---
+# yamllint disable rule:line-length
+- name: 'Pre-keys no pre secure boot | verify'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Pre-keys no pre secure boot | verify | query mokutil log'
+      ansible.builtin.slurp:
+        path: '/tmp/mokutil.log'
+      register: _test_secure_boot_mokutil_log
+
+    - name: 'Pre-keys no pre secure boot | verify | parse mokutil log'
+      ansible.builtin.set_fact:
+        _test_secure_boot_log: '{{ _test_secure_boot_mokutil_log.content | b64decode }}'
+
+    - name: 'Pre-keys no pre secure boot | verify | assert secure boot options toggled'
+      ansible.builtin.assert:
+        that:
+          - '"--generate-hash" in _test_secure_boot_log'
+          - '"--test-key" in _test_secure_boot_log'
+          - '"--reset" not in _test_secure_boot_log'
+          - '"--import" not in _test_secure_boot_log'
+          - '"--enable-validation" in _test_secure_boot_log'
+        fail_msg: >
+          mokutil should have the following call log:
+            --generate-hash=ValidPassword
+            --sb-state
+            --test-key /var/lib/dkms/mok.pub
+            --timeout -1
+            --enable-validation --hash-file /tmp/.mokhash
