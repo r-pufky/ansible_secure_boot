@@ -1,0 +1,56 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Signature Validation
+###############################################################################
+# Enables signature validation (effectively turns secure boot on or off).
+#
+# Args:
+#   _secure_boot_state: bool - validation enabled
+#   _secure_boot_hash: str - hashed secure boot password
+#
+# Generates:
+#   _secure_boot_validation: bool - if signature validation has been changed
+#
+# Reference:
+# * https://wiki.debian.org/SecureBoot#DKMS_and_secure_boot
+# * https://github.com/jiazhang0/meta-efi-secure-boot/blob/master/README.md#mokutil-and-mok-manager
+# * https://media.defense.gov/2023/Mar/20/2003182401/-1/-1/0/CTR-UEFI-SECURE-BOOT-CUSTOMIZATION-20230317.PDF
+
+- name: 'Signature validation'
+  when: >
+    secure_boot_enable and not _secure_boot_state or
+    not secure_boot_enable and _secure_boot_state
+  block:
+    - name: 'Signature validation | validation operation'
+      ansible.builtin.set_fact:
+        _secure_boot_validation: true
+
+    - name: 'Signature validation | set MOK manager timeout'
+      ansible.builtin.command: '{{ secure_boot_role_mokutil }} --timeout {{ secure_boot_manager_timeout }}'
+      changed_when: true
+
+    - name: 'Signature validation | touch hash file'
+      ansible.builtin.copy:
+        dest: '{{ secure_boot_role_tmp_hash }}'
+        content: '{{ _secure_boot_hash }}'
+        owner: 'root'
+        group: 'root'
+        mode: '0600'
+
+    - name: 'Signature validation | enable'
+      when: secure_boot_enable
+      ansible.builtin.command: '{{ secure_boot_role_mokutil }} --enable-validation --hash-file {{ secure_boot_role_tmp_hash }}'
+      become: true
+      changed_when: true
+
+    - name: 'Signature validation | disable'
+      when: not secure_boot_enable
+      ansible.builtin.command: '{{ secure_boot_role_mokutil }} --disable-validation --hash-file {{ secure_boot_role_tmp_hash }}'
+      become: true
+      changed_when: true
+  always:
+    - name: 'Enrollment | new key | remove hash file'
+      ansible.builtin.file:
+        path: '{{ secure_boot_role_tmp_hash }}'
+        state: 'absent'

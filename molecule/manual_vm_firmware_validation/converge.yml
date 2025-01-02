@@ -1,0 +1,11 @@
+---
+# yamllint disable rule:line-length
+- name: 'Manual VM firmware validation | converge'
+  hosts: 'all'
+  gather_facts: false
+  become: true
+  tasks:
+    - name: 'Manual VM firmware validation | converge | apply r_pufky.srv.secure_boot'
+      when: secure_boot_manual_testing_enable
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.secure_boot'

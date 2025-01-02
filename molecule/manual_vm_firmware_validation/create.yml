@@ -1,0 +1,16 @@
+---
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  no_log: "{{ molecule_no_log }}"
+  tasks:
+    - name: 'Create | molecule inventory'
+      ansible.builtin.debug:
+        msg: skipping provisioning
+
+    - name: 'Create | populate instance config'
+      ansible.builtin.set_fact:
+        instance_conf_dict: {'instance': '{{ item.name }}'}
+      loop: '{{ molecule_yml.platforms }}'
+      register: instance_config_dict

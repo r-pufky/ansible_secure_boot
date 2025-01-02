@@ -1,0 +1,40 @@
+---
+###############################################################################
+# Reboot
+###############################################################################
+# Manages machine reboot process for secure boot.
+#
+# Args:
+#   _secure_boot_enrolled: bool - if key is enrolled (loaded) this boot cycle
+#   _secure_boot_validation: bool - if signature validation has been changed
+
+- name: 'Reboot'
+  when: _secure_boot_enrolled or _secure_boot_validation
+  block:
+    - name: 'Reboot | ACTION REQUIRED'
+      ansible.builtin.debug:
+        msg: |
+          Secure boot changes have been staged:
+          * New keys enrolled: {{ _secure_boot_enrolled }}
+          * Signature validation changed: {{ _secure_boot_validation }}
+
+          MokManager will appear on boot; use secure_boot_password.
+
+          ACTION REQUIRED:
+
+            Enroll MOK ➤ Continue ➤ Enroll the keys(s)? ➤ Yes
+
+    - name: 'Reboot | HALT'
+      when: secure_boot_halt_enable
+      ansible.builtin.fail:
+        msg: |
+          ROLE HALTED for manual interaction.
+
+          Set secure_boot_halt_enable=false to disable this.
+
+    - name: 'Enrollment | REBOOT'
+      when: >
+        not secure_boot_halt_enable and
+        not secure_boot_testing_enable
+      ansible.builtin.reboot:
+        reboot_timeout: '{{ secure_boot_reboot_timeout }}'

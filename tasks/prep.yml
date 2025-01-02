@@ -1,0 +1,60 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Secure Boot Prep
+###############################################################################
+# Query current hardware state and MOK key locations.
+#
+# Generates:
+#   _secure_boot_state: bool - validation enabled
+#   _secure_boot_public: str - location for selected public key
+#   _secure_boot_private: str - location for selected private key
+#   _secure_boot_hash: str - hashed secure boot password
+#   _secure_boot_key_exists: stat - specified MOK key file exists
+#   _secure_boot_enrolled: bool - if key is enrolled (loaded) this boot cycle
+#   _secure_boot_validation: bool - if signature validation has been changed
+
+- name: 'Prep | assert custom MOK public and private keys defined'
+  when: secure_boot_public | length > 0
+  ansible.builtin.assert:
+    that:
+      - secure_book_private | length > 0
+    fail_msg: >
+      Using secure_boot_public requires setting secure_boot_private.
+
+- name: 'Prep | assert password constraints'
+  ansible.builtin.assert:
+    that:
+      - secure_boot_password | length >= 8
+      - secure_boot_password | length <= 16
+      - secure_boot_password is regex('^[a-zA-Z0-9]+$')
+    fail_msg: >
+      secure_boot_password must be between 8-16 alphanumeric characters.
+
+# Same hash is needed for all operations done within a reboot.
+- name: 'Prep | generate password hash'
+  ansible.builtin.command: '{{ secure_boot_role_mokutil }} --generate-hash={{ secure_boot_password }}'
+  register: _secure_boot_password_hash
+  changed_when: false
+  # no_log: true  # passwords
+
+- name: 'Prep | generate locations'
+  ansible.builtin.set_fact:
+    _secure_boot_public: '{{ secure_boot_key_location ~ "/" ~ (secure_boot_public | length > 0) | ternary("ansible_", "") ~ "mok.pub" }}'
+    _secure_boot_private: '{{ secure_boot_key_location ~ "/" ~ (secure_boot_public | length > 0) | ternary("ansible_", "") ~ "mok.key" }}'
+    _secure_boot_hash: '{{ _secure_boot_password_hash.stdout }}'
+
+- name: 'Prep | reset'
+  when: secure_boot_reset
+  ansible.builtin.include_tasks: 'reset_secure_boot.yml'
+
+- name: 'Prep | query current state'
+  ansible.builtin.command: '{{ secure_boot_role_mokutil }} --sb-state'
+  register: _secure_boot_query_state
+  changed_when: false
+
+- name: 'Prep | parse state'
+  ansible.builtin.set_fact:
+    _secure_boot_state: '{{ true if "SecureBoot enabled" in _secure_boot_query_state.stdout else false }}'
+    _secure_boot_validation: false
+    _secure_boot_enrolled: false

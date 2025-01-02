@@ -1,0 +1,54 @@
+---
+# yamllint disable rule:line-length
+#
+# Test secure boot firmware changes (manual)
+#
+# Secure boot changes explicitly require interactive steps so testing requires
+# manual interactions for confirming tests. VM images do not have EFI setup by
+# default.
+#
+# * Create a manual VM with EFI, certificates loaded but secure boot disabled.
+# * Update VM IP for test
+# * molecule converge -- -v -e 'secure_boot_manual_testing_enable=true'
+#   * will run until 'Signature validation | enable' (secure boot only enabled
+#     outside of VM)
+# * kill test; reboot VM and confirm MOK manager appears on next boot
+dependency:
+  name: 'galaxy'
+driver:
+  name: default
+provisioner:
+  name: 'ansible'
+  config_options:
+    defaults:
+      interpreter_python: 'auto_silent'  # suppress warnings
+      callback_whitelist: 'profile_tasks, timer, yaml'  # output profiling info
+  inventory:
+    group_vars:
+      all:
+        ansible_ssh_user: 'root'
+        ansible_ssh_private_key_file: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/files/id.key'
+        secure_boot_password: 'ValidPassword'
+        secure_boot_manual_testing_enable: false
+platforms:
+  - name: '10.10.10.10'  # set manual VM IP
+verifier:
+  name: 'ansible'
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .
+scenario:
+  test_sequence:
+    # - 'dependency'
+    # - 'cleanup'
+    - 'destroy'
+    - 'syntax'
+    - 'create'
+    - 'prepare'
+    - 'converge'
+    - 'idempotence'
+    # - 'side_effect'
+    - 'verify'
+    # - 'cleanup'
+    - 'destroy'

@@ -1,0 +1,65 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Enroll MOK (Machine Owners Key)
+###############################################################################
+# Enroll MOK keys if required.
+#
+# Exit codes:
+#   0: not enrolled
+#   1: already enrolled
+#   255: invalid x509 format
+#
+# Args:
+#   _secure_boot_public: str - location for selected public key
+#   _secure_boot_hash: str - hashed secure boot password
+#   _secure_boot_state: bool - validation enabled
+#
+# Generates:
+#   _secure_boot_enrolled: bool - if key is enrolled (loaded) this boot cycle
+#
+# Reference:
+# * https://wiki.debian.org/SecureBoot#DKMS_and_secure_boot
+# * https://github.com/jiazhang0/meta-efi-secure-boot/blob/master/README.md#mokutil-and-mok-manager
+# * https://media.defense.gov/2023/Mar/20/2003182401/-1/-1/0/CTR-UEFI-SECURE-BOOT-CUSTOMIZATION-20230317.PDF
+
+
+- name: 'Enrollment | check enrollment status'
+  ansible.builtin.command: '{{ secure_boot_role_mokutil }} --test-key {{ _secure_boot_public }}'
+  register: _secure_boot_enrollment_status
+  failed_when: _secure_boot_enrollment_status.rc > 1
+  changed_when: false
+
+- name: 'Enrollment | parse enrollment status'
+  ansible.builtin.set_fact:
+    _secure_boot_pre_enrolled: '{{ _secure_boot_enrollment_status.rc | bool }}'
+
+- name: 'Enrollment | new key'
+  when: not _secure_boot_pre_enrolled
+  block:
+    - name: 'Enroll | new key | enroll operation'
+      ansible.builtin.set_fact:
+        _secure_boot_enrolled: true
+
+    - name: 'Enrollment | new key | set MOK manager timeout'
+      ansible.builtin.command: '{{ secure_boot_role_mokutil }} --timeout {{ secure_boot_manager_timeout }}'
+      changed_when: true
+
+    - name: 'Enrollment | new key | touch hash file'
+      ansible.builtin.copy:
+        dest: '{{ secure_boot_role_tmp_hash }}'
+        content: '{{ _secure_boot_hash }}'
+        owner: 'root'
+        group: 'root'
+        mode: '0600'
+
+    - name: 'Enrollment | new key | enroll {{ _secure_boot_public }}'
+      ansible.builtin.command: '{{ secure_boot_role_mokutil }} --import {{ _secure_boot_public }} --hash-file {{ secure_boot_role_tmp_hash }}'
+      become: true
+      register: _secure_boot_mok_import
+      changed_when: true
+  always:
+    - name: 'Enrollment | new key | remove hash file'
+      ansible.builtin.file:
+        path: '{{ secure_boot_role_tmp_hash }}'
+        state: 'absent'
