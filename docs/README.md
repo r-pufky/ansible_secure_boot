@@ -26,6 +26,7 @@ mokutil --test-key /var/lib/dkms/mok.pub
 mokutil --import /var/lib/dkms/mok.pub
 mokutil --list-new
 mokutil --enable-validation
+mokutil --timeout -1
 reboot
 ```
 On reboot enter the same password and confirm the new keys to be loaded. The
