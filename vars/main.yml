@@ -7,17 +7,20 @@
 secure_boot_role_validate_date: '2025-01-02'
 secure_boot_role_validate_release: 'bookworm'
 
-# Default packages for MOK.
-secure_boot_role_packages:
-  - 'mokutil'  # MOK enrollment
-  - 'openssl'  # MOK key generation
-  - 'dkms'  # to load MOK key for any future DKMS actions
-
 # mokutil binary
 secure_boot_role_mokutil: '/usr/bin/mokutil'
 
 # mokutil password hash temp file
 secure_boot_role_tmp_hash: '/tmp/.mokhash'
+
+###############################################################################
+# APT Packages
+###############################################################################
+
+secure_boot_role_packages:
+  - 'mokutil'  # MOK enrollment
+  - 'openssl'  # MOK key generation
+  - 'dkms'  # to load MOK key for any future DKMS actions
 
 ###############################################################################
 # MOK Key Generation
@@ -46,5 +49,5 @@ secure_boot_role_create_mok: >
   -outform {{ secure_boot_role_mok_format }}
   -days {{ secure_boot_role_mok_expiration }}
   -subj "/CN={{ secure_boot_role_mok_common_name }}/"
-# -keyout mok.key  # use generated location
-# -out mok.pub  # use generated location
+# -keyout mok.key  # use generated location.
+# -out mok.pub  # use generated location.
