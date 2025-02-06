@@ -10,6 +10,6 @@
         msg: |
           TEST WILL NOT EXECUTE UNLESS IT IS EXPLICITLY ENABLED.
 
-          Set secure_boot_manual_testing_enable: true to test live API commands.
+          Set secure_boot_manual_testing_enable=true to test live API commands.
 
             molecule converge -s manual_vm_firmware_validation -- -v -e 'secure_boot_manual_testing_enable=true'
