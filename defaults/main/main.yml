@@ -76,7 +76,7 @@ secure_boot_manager_timeout: -1
 # This should be set to a value that which allows ample time for physically
 # entering the secure_boot_password on the hardware console.
 #
-# Reboot **only** occur if there are changes made to secure boot firmware.
+# Reboot **only** occurs if there are changes made to secure boot firmware.
 #
 # Default: 600 (5 minutes).
 secure_boot_reboot_timeout: 600
