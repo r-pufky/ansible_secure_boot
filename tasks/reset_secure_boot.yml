@@ -36,7 +36,7 @@
           MokManager will appear on boot; use secure_boot_password.
 
           ACTION REQUIRED:
-            Reset MOK ➤ Erase all stored keys in MokList? ➤ Yes
+            Reset MOK > Erase all stored keys in MokList? > Yes
 
     - name: 'Reset secure boot | REBOOT'
       when: >

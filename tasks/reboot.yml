@@ -22,7 +22,7 @@
 
           ACTION REQUIRED:
 
-            Enroll MOK ➤ Continue ➤ Enroll the keys(s)? ➤ Yes
+            Enroll MOK > Continue > Enroll the keys(s)? > Yes
 
     - name: 'Reboot | HALT'
       when: secure_boot_halt_enable
