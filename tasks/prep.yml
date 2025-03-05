@@ -17,6 +17,7 @@
 - name: 'Prep | assert custom MOK public and private keys defined'
   when: secure_boot_public | length > 0
   ansible.builtin.assert:
+    quiet: true
     that:
       - secure_book_private | length > 0
     fail_msg: >
@@ -24,6 +25,7 @@
 
 - name: 'Prep | assert password constraints'
   ansible.builtin.assert:
+    quiet: true
     that:
       - secure_boot_password | length >= 8
       - secure_boot_password | length <= 16
