@@ -1,0 +1,33 @@
+---
+# yamllint disable rule:line-length
+# Testing requires a valid certificate. Generate a test certificate.
+#
+# Reference:
+# * https://wiki.debian.org/SecureBoot#MOK_-_Machine_Owner_Key
+# * https://gist.github.com/rquackenbush/53ff432567699b21c86f3360fb4ec7f0
+# * https://superuser.com/questions/226192/avoid-password-prompt-for-keys-and-prompts-for-dn-information
+
+- name: 'No actions | prepare'
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: 'No actions | prepare | generate cache location'
+      ansible.builtin.set_fact:
+        _test_cache: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
+
+    - name: 'No actions | prepare | create cache'
+      ansible.builtin.file:
+        path: '{{ _test_cache }}'
+        mode: '0755'
+        state: 'directory'
+
+    - name: 'No actions | prepare | generate test certificate'
+      ansible.builtin.command: 'openssl req -new -x509 -newkey rsa:4096 -nodes -days 36500 -subj "/C=US/ST=NY/L=NY/O=test/CN=test.example.com" -keyout "{{ _test_cache }}/mok.key" -outform DER -out "{{ _test_cache }}/mok.der"'
+      args:
+        creates: '{{ _test_cache }}/mok.key'
+
+    - name: 'No actions | prepare | sign test certificate'
+      ansible.builtin.command: 'openssl x509 -inform der -in "{{ _test_cache }}/mok.der" -out "{{ _test_cache }}/mok.pub"'
+      args:
+        creates: '{{ _test_cache }}/mok.pub'

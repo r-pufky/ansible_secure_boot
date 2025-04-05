@@ -26,7 +26,7 @@
 
     - name: 'No actions | converge | inject mock mok.key'
       ansible.builtin.copy:
-        src: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/files/mok.key'
+        src: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/mok.key'
         dest: '/var/lib/dkms/mok.key'
         owner: 'root'
         group: 'root'
@@ -34,7 +34,7 @@
 
     - name: 'No actions | converge | inject mock mok.key'
       ansible.builtin.copy:
-        src: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/files/mok.pub'
+        src: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/mok.pub'
         dest: '/var/lib/dkms/mok.pub'
         owner: 'root'
         group: 'root'

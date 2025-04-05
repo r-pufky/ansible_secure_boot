@@ -42,7 +42,7 @@ scenario:
     - 'destroy'
     - 'syntax'
     - 'create'
-    # - 'prepare'
+    - 'prepare'
     - 'converge'
     # - 'idempotence'  # hashed password file always regenerated if needed
     # - 'side_effect'

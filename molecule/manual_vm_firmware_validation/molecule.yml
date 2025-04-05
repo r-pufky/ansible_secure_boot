@@ -30,7 +30,7 @@ provisioner:
     group_vars:
       all:
         ansible_ssh_user: 'root'
-        ansible_ssh_private_key_file: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/files/id.key'
+        ansible_ssh_private_key_file: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/id.key'
         secure_boot_password: 'ValidPassword'
         secure_boot_manual_testing_enable: false
 platforms:

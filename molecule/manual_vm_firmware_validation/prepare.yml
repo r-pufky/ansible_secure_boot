@@ -1,5 +1,27 @@
 ---
 # yamllint disable rule:line-length
+# Testing requires ansible public keys. Generate keys for testing.
+
+- name: 'Manual VM firmware validation | prepare'
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: 'Manual VM firmware validation | prepare | generate cache location'
+      ansible.builtin.set_fact:
+        _test_cache: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
+
+    - name: 'Manual VM firmware validation | prepare | create cache'
+      ansible.builtin.file:
+        path: '{{ _test_cache }}'
+        mode: '0755'
+        state: 'directory'
+
+    - name: 'Manual VM firmware validation | prepare | generate test ssh keys'
+      ansible.builtin.command: 'ssh-keygen -t ed25519 -C "ansible@example.com" -f "{{ _test_cache }}/id" -q -N ""'
+      args:
+        creates: '{{ _test_cache }}/id'
+
 - name: 'Manual VM firmware validation | prepare'
   hosts: 'all'
   gather_facts: false
