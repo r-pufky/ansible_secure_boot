@@ -11,12 +11,12 @@
 #   255: invalid x509 format
 #
 # Args:
-#   _secure_boot_public: str - location for selected public key
-#   _secure_boot_hash: str - hashed secure boot password
-#   _secure_boot_state: bool - validation enabled
+#   _secure_boot_public: str - Location for selected public key.
+#   _secure_boot_hash: str - Hashed secure boot password.
+#   _secure_boot_state: bool - Validation enabled.
 #
 # Generates:
-#   _secure_boot_enrolled: bool - if key is enrolled (loaded) this boot cycle
+#   _secure_boot_enrolled: bool - If key is enrolled (loaded) this boot cycle.
 #
 # Reference:
 # * https://wiki.debian.org/SecureBoot#DKMS_and_secure_boot

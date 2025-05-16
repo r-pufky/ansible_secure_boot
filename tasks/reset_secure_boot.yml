@@ -4,14 +4,8 @@
 ###############################################################################
 # Clears user certificates from secure boot. Requires reboot.
 #
-# Generates:
-#   _secure_boot_state: bool - validation enabled
-#   _secure_boot_public: str - location for selected public key
-#   _secure_boot_private: str - location for selected private key
-#   _secure_boot_hash: str - hashed secure boot password
-#   _secure_boot_key_exists: stat - specified MOK key file exists
-#   _secure_boot_enrolled: bool - if key is enrolled (loaded) this boot cycle
-#   _secure_boot_validation: bool - if signature validation has been changed
+# Args:
+#   _secure_boot_hash: str - Hashed secure boot password.
 
 - name: 'Reset secure boot | clear secure boot keys'
   block:

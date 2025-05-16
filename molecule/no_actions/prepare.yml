@@ -16,16 +16,18 @@
   connection: local
   gather_facts: false
   tasks:
+
     - name: 'No actions | prepare | generate cache location'
       ansible.builtin.set_fact:
         _test_cache:
           '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
 
-    - name: 'No actions | prepare | create cache'
-      ansible.builtin.file:
-        path: '{{ _test_cache }}'
-        mode: '0755'
-        state: 'directory'
+    - name: 'No actions | prepare | cache'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'create_cache.yml'
+      vars:
+        test_name: 'No actions | prepare | cache'
 
     - name: 'No actions | prepare | generate test certificate'
       ansible.builtin.command:

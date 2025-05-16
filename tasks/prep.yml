@@ -5,13 +5,12 @@
 # Query current hardware state and MOK key locations.
 #
 # Generates:
-#   _secure_boot_state: bool - validation enabled
-#   _secure_boot_public: str - location for selected public key
-#   _secure_boot_private: str - location for selected private key
-#   _secure_boot_hash: str - hashed secure boot password
-#   _secure_boot_key_exists: stat - specified MOK key file exists
-#   _secure_boot_enrolled: bool - if key is enrolled (loaded) this boot cycle
-#   _secure_boot_validation: bool - if signature validation has been changed
+#   _secure_boot_state: bool - Validation enabled.
+#   _secure_boot_public: str - Location for selected public key.
+#   _secure_boot_private: str - Location for selected private key.
+#   _secure_boot_hash: str - Hashed secure boot password.
+#   _secure_boot_enrolled: bool - If key is enrolled (loaded) this boot cycle.
+#   _secure_boot_validation: bool - If signature validation has been changed.
 
 - name: 'Prep | assert custom MOK public and private keys defined'
   when: secure_boot_public | length > 0

@@ -8,8 +8,8 @@
 # Key generation uses defaults from Debian DKMS auto generation.
 #
 # Args:
-#   _secure_boot_public: str - location for selected public key
-#   _secure_boot_private: str - location for selected private key
+#   _secure_boot_public: str - Location for selected public key.
+#   _secure_boot_private: str - Location for selected private key.
 #
 # Reference:
 # * https://wiki.debian.org/SecureBoot#DKMS_and_secure_boot
@@ -46,18 +46,26 @@
         mode: '0644'
       become: true
 
-- name: 'MOK | query current key state'
-  ansible.builtin.stat:
-    path: '{{ _secure_boot_private }}'
-  register: _secure_boot_key_exists
-
+# Create MOK key (DER signing)
 - name: 'MOK | generate new {{ _secure_boot_private }}'
-  when: not _secure_boot_key_exists.stat.exists
   ansible.builtin.command:
     argv:
-      - '{{ secure_boot_role_create_mok }}'
+      - 'openssl'
+      - 'req'
+      - '-nodes'
+      - '-new'
+      - '-x509'
+      - '-newkey'
+      - '{{ secure_boot_role_mok_algorithm }}'
+      - '-outform'
+      - '{{ secure_boot_role_mok_format }}'
+      - '-days'
+      - '{{ secure_boot_role_mok_expiration }}'
+      - '-subj'
+      - '/CN={{ secure_boot_role_mok_common_name }}/'
       - '-keyout'
       - '{{ _secure_boot_private }}'
       - '-out'
       - '{{ _secure_boot_public }}'
+    creates: '{{ _secure_boot_private }}'
   changed_when: true

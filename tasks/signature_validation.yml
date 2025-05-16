@@ -6,11 +6,11 @@
 # Enables signature validation (effectively turns secure boot on or off).
 #
 # Args:
-#   _secure_boot_state: bool - validation enabled
-#   _secure_boot_hash: str - hashed secure boot password
+#   _secure_boot_state: bool - Validation enabled.
+#   _secure_boot_hash: str - Hashed secure boot password.
 #
 # Generates:
-#   _secure_boot_validation: bool - if signature validation has been changed
+#   _secure_boot_validation: bool - If signature validation has been changed.
 #
 # Reference:
 # * https://wiki.debian.org/SecureBoot#DKMS_and_secure_boot

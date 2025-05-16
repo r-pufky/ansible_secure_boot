@@ -5,8 +5,8 @@
 # Manages machine reboot process for secure boot.
 #
 # Args:
-#   _secure_boot_enrolled: bool - if key is enrolled (loaded) this boot cycle
-#   _secure_boot_validation: bool - if signature validation has been changed
+#   _secure_boot_enrolled: bool - If key is enrolled (loaded) this boot cycle.
+#   _secure_boot_validation: bool - If signature validation has been changed.
 
 - name: 'Reboot'
   when: _secure_boot_enrolled or _secure_boot_validation

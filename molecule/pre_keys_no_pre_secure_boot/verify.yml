@@ -17,6 +17,7 @@
         Pre-keys no pre secure boot | verify |
         assert secure boot options toggled
       ansible.builtin.assert:
+        quiet: true
         that:
           - '"--generate-hash" in _test_secure_boot_log'
           - '"--test-key" in _test_secure_boot_log'
@@ -24,7 +25,7 @@
           - '"--import" not in _test_secure_boot_log'
           - '"--enable-validation" in _test_secure_boot_log'
         fail_msg: >
-          mokutil should have the following call log:
+          ✘ mokutil should have the following call log:
             --generate-hash=ValidPassword
             --sb-state
             --test-key /var/lib/dkms/mok.pub
