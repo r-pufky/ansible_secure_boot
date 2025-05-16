@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 - name: 'No actions | verify'
   hosts: 'all'
   gather_facts: false
@@ -11,7 +10,8 @@
 
     - name: 'No actions | verify | parse mokutil log'
       ansible.builtin.set_fact:
-        _test_secure_boot_log: '{{ _test_secure_boot_mokutil_log.content | b64decode }}'
+        _test_secure_boot_log:
+          '{{ _test_secure_boot_mokutil_log.content | b64decode }}'
 
     - name: 'No actions | verify | assert secure boot options toggled'
       ansible.builtin.assert:

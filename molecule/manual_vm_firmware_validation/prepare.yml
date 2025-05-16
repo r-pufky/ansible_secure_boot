@@ -1,5 +1,8 @@
 ---
 # yamllint disable rule:line-length
+###############################################################################
+# Prepare
+###############################################################################
 # Testing requires ansible public keys. Generate keys for testing.
 
 - name: 'Manual VM firmware validation | prepare'
@@ -9,28 +12,40 @@
   tasks:
     - name: 'Manual VM firmware validation | prepare | generate cache location'
       ansible.builtin.set_fact:
-        _test_cache: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
+        _test_cache:
+          '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
 
-    - name: 'Manual VM firmware validation | prepare | create cache'
-      ansible.builtin.file:
-        path: '{{ _test_cache }}'
-        mode: '0755'
-        state: 'directory'
+    - name: 'Manual VM firmware validation | prepare | cache'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'create_cache.yml'
+      vars:
+        test_name: 'Manual VM firmware validation | prepare | cache'
 
     - name: 'Manual VM firmware validation | prepare | generate test ssh keys'
-      ansible.builtin.command: 'ssh-keygen -t ed25519 -C "ansible@example.com" -f "{{ _test_cache }}/id" -q -N ""'
-      args:
+      ansible.builtin.command:
+        argv:
+          - 'ssh-keygen'
+          - '-t'
+          - 'ed25519'
+          - '-C'
+          - 'ansible@example.com'
+          - '-f'
+          - '{{ _test_cache }}/id'
+          - '-q'
+          - '-N'
+          - '""'
         creates: '{{ _test_cache }}/id'
 
 - name: 'Manual VM firmware validation | prepare'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Manual VM firmware validation | prepare | TESTING NOT ENABLED'
+    - name: 'Manual VM firmware validation | prepare | TESTING NOT ENABLED ⚠'
       when: not secure_boot_manual_testing_enable
       ansible.builtin.debug:
         msg: |
-          TEST WILL NOT EXECUTE UNLESS IT IS EXPLICITLY ENABLED.
+          ⚠ TEST WILL NOT EXECUTE UNLESS IT IS EXPLICITLY ENABLED.
 
           Set secure_boot_manual_testing_enable=true to test live API commands.
 

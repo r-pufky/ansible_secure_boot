@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 - name: 'Pre-keys no pre secure boot | verify'
   hosts: 'all'
   gather_facts: false
@@ -11,9 +10,12 @@
 
     - name: 'Pre-keys no pre secure boot | verify | parse mokutil log'
       ansible.builtin.set_fact:
-        _test_secure_boot_log: '{{ _test_secure_boot_mokutil_log.content | b64decode }}'
+        _test_secure_boot_log:
+          '{{ _test_secure_boot_mokutil_log.content | b64decode }}'
 
-    - name: 'Pre-keys no pre secure boot | verify | assert secure boot options toggled'
+    - name: >
+        Pre-keys no pre secure boot | verify |
+        assert secure boot options toggled
       ansible.builtin.assert:
         that:
           - '"--generate-hash" in _test_secure_boot_log'

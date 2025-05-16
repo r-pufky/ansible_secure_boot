@@ -1,9 +1,19 @@
 ---
+###############################################################################
+# Default
+###############################################################################
 # Enroll keys with default options in default state.
 #
-# State: (no_pre_keys_no_pre_secure_boot)
-# * pre-enabled secure boot? false
-# * pre-enrolled keys? false
+# Tests:
+# * Verify call log contains expected operations:
+#   --generate-hash=ValidPassword
+#   --sb-state
+#   --test-key /var/lib/dkms/mok.pub
+#   --timeout -1
+#   --import /var/lib/dkms/mok.pub --hash-file /tmp/.mokhash
+#   --timeout -1
+#   --enable-validation --hash-file /tmp/.mokhash
+
 dependency:
   name: 'galaxy'
 driver:

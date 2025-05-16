@@ -1,9 +1,21 @@
 ---
-# Enroll keys with secure boot state already 'enabled'.
+###############################################################################
+# No Pre Keys Pre Secure Boot
+###############################################################################
+# No pre-enrolled keys with secure boot state already 'enabled'.
 #
 # State:
-# * pre-enrolled keys? true
-# * pre-enabled secure boot? false
+# * pre-enrolled keys? False.
+# * pre-enabled secure boot? True.
+#
+# Tests:
+# * Verify call log contains expected operations:
+#   --generate-hash=ValidPassword
+#   --sb-state
+#   --test-key /var/lib/dkms/mok.pub
+#   --timeout -1
+#   --import /var/lib/dkms/mok.pub --hash-file /tmp/.mokhash
+
 dependency:
   name: 'galaxy'
 driver:

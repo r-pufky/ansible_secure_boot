@@ -4,14 +4,12 @@ Secure boot management.
 ## Requirements
 [supported platforms](https://github.com/r-pufky/ansible_secure_boot/blob/main/meta/main.yml)
 
-[collections/roles](https://github.com/r-pufky/ansible_secure_boot/blob/main/meta/requirements.yml)
-
 ## Role Variables
 [defaults](https://github.com/r-pufky/ansible_secure_boot/blob/main/defaults/main)
 
 ## Dependencies
-Part of the [r_pufky.srv](https://github.com/r-pufky/ansible_collection_srv)
-collection.
+**galaxy-ng** roles cannot be used independently. Part of
+[r_pufky.deb](https://github.com/r-pufky/ansible_collection_deb) collection.
 
 ## Example Playbook
 This will install MOK (Machine Owner Keys) and enable secure booting for
@@ -24,7 +22,7 @@ Apply the base role
 ``` yaml
 - name: 'Enable Secure Boot'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.secure_boot'
+    name: 'r_pufky.deb.secure_boot'
   vars:
     secure_boot_password: '{{ vault_password }}'
 ```
@@ -32,7 +30,7 @@ Machine is rebooted **only** if there are changes to secure boot;
 `secure_boot_password` is needed at the physical console to confirm.
 
 ## Development
-Configure [environment](https://github.com/r-pufky/ansible_collection_srv/blob/main/docs/dev/environment/README.md)
+Configure [environment](https://github.com/r-pufky/ansible_collection_docs/blob/main/dev/environment/README.md)
 
 Run all unit tests:
 ``` bash

@@ -15,6 +15,7 @@
 # * https://wiki.debian.org/SecureBoot#DKMS_and_secure_boot
 # * https://github.com/jiazhang0/meta-efi-secure-boot/blob/master/README.md#mokutil-and-mok-manager
 # * https://media.defense.gov/2023/Mar/20/2003182401/-1/-1/0/CTR-UEFI-SECURE-BOOT-CUSTOMIZATION-20230317.PDF
+# yamllint enable rule:line-length
 
 - name: 'MOK | write custom key'
   when: secure_boot_public | length > 0
@@ -52,5 +53,11 @@
 
 - name: 'MOK | generate new {{ _secure_boot_private }}'
   when: not _secure_boot_key_exists.stat.exists
-  ansible.builtin.command: '{{ secure_boot_role_create_mok }} -keyout {{ _secure_boot_private }} -out {{ _secure_boot_public }}'
+  ansible.builtin.command:
+    argv:
+      - '{{ secure_boot_role_create_mok }}'
+      - '-keyout'
+      - '{{ _secure_boot_private }}'
+      - '-out'
+      - '{{ _secure_boot_public }}'
   changed_when: true

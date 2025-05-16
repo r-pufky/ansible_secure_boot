@@ -1,10 +1,25 @@
 ---
+###############################################################################
+# Reset
+###############################################################################
 # Forcing reset will force a reboot before configuring settings. This should
 # appear as a 'default' run with a --reset command before operations.
 #
-# State: (no_pre_keys_no_pre_secure_boot)
-# * pre-enabled secure boot? false
-# * pre-enrolled keys? false
+# State:
+# * pre-enrolled keys? False.
+# * pre-enabled secure boot? False.
+#
+# Tests:
+# * Verify call log contains expected operations:
+#   --generate-hash=ValidPassword
+#   --reset --hash-file /tmp/.mokhash
+#   --sb-state
+#   --test-key /var/lib/dkms/mok.pub
+#   --timeout -1
+#   --import /var/lib/dkms/mok.pub --hash-file /tmp/.mokhash
+#   --timeout -1
+#   --enable-validation --hash-file /tmp/.mokhash
+
 dependency:
   name: 'galaxy'
 driver:

@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # Reset Secure Boot State
 ###############################################################################
@@ -25,17 +24,23 @@
         mode: '0600'
 
     - name: 'Reset secure boot | clear existing keys'
-      ansible.builtin.command: '{{ secure_boot_role_mokutil }} --reset --hash-file {{ secure_boot_role_tmp_hash }}'
+      ansible.builtin.command:
+        argv:
+          - '{{ secure_boot_role_mokutil }}'
+          - '--reset'
+          - '--hash-file'
+          - '{{ secure_boot_role_tmp_hash }}'
       changed_when: true
 
-    - name: 'Reset secure boot | ACTION REQUIRED'
+    - name: 'Reset secure boot | ACTION REQUIRED ⚠'
       ansible.builtin.debug:
         msg: |
           Secure boot user keys have been cleared.
 
           MokManager will appear on boot; use secure_boot_password.
 
-          ACTION REQUIRED:
+          ⚠ ACTION REQUIRED:
+
             Reset MOK > Erase all stored keys in MokList? > Yes
 
     - name: 'Reset secure boot | REBOOT'
@@ -45,11 +50,11 @@
       ansible.builtin.reboot:
         reboot_timeout: '{{ secure_boot_reboot_timeout }}'
 
-    - name: 'Reset secure boot | HALT'
+    - name: 'Reset secure boot | HALT ⚠'
       when: secure_boot_halt_enable
       ansible.builtin.fail:
         msg: |
-          ROLE HALTED for manual interaction.
+          ⚠ ROLE HALTED for manual interaction.
 
           Set secure_boot_halt_enable=false to disable this.
   always:

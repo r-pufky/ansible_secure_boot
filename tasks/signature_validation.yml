@@ -16,6 +16,7 @@
 # * https://wiki.debian.org/SecureBoot#DKMS_and_secure_boot
 # * https://github.com/jiazhang0/meta-efi-secure-boot/blob/master/README.md#mokutil-and-mok-manager
 # * https://media.defense.gov/2023/Mar/20/2003182401/-1/-1/0/CTR-UEFI-SECURE-BOOT-CUSTOMIZATION-20230317.PDF
+# yamllint enable rule:line-length
 
 - name: 'Signature validation'
   when: >
@@ -27,7 +28,11 @@
         _secure_boot_validation: true
 
     - name: 'Signature validation | set MOK manager timeout'
-      ansible.builtin.command: '{{ secure_boot_role_mokutil }} --timeout {{ secure_boot_manager_timeout }}'
+      ansible.builtin.command:
+        argv:
+          - '{{ secure_boot_role_mokutil }}'
+          - '--timeout'
+          - '{{ secure_boot_manager_timeout }}'
       changed_when: true
 
     - name: 'Signature validation | touch hash file'
@@ -40,13 +45,23 @@
 
     - name: 'Signature validation | enable'
       when: secure_boot_enable
-      ansible.builtin.command: '{{ secure_boot_role_mokutil }} --enable-validation --hash-file {{ secure_boot_role_tmp_hash }}'
+      ansible.builtin.command:
+        argv:
+          - '{{ secure_boot_role_mokutil }}'
+          - '--enable-validation'
+          - '--hash-file'
+          - '{{ secure_boot_role_tmp_hash }}'
       become: true
       changed_when: true
 
     - name: 'Signature validation | disable'
       when: not secure_boot_enable
-      ansible.builtin.command: '{{ secure_boot_role_mokutil }} --disable-validation --hash-file {{ secure_boot_role_tmp_hash }}'
+      ansible.builtin.command:
+        argv:
+          - '{{ secure_boot_role_mokutil }}'
+          - '--disable-validation'
+          - '--hash-file'
+          - '{{ secure_boot_role_tmp_hash }}'
       become: true
       changed_when: true
   always:

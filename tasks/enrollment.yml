@@ -22,10 +22,14 @@
 # * https://wiki.debian.org/SecureBoot#DKMS_and_secure_boot
 # * https://github.com/jiazhang0/meta-efi-secure-boot/blob/master/README.md#mokutil-and-mok-manager
 # * https://media.defense.gov/2023/Mar/20/2003182401/-1/-1/0/CTR-UEFI-SECURE-BOOT-CUSTOMIZATION-20230317.PDF
-
+# yamllint enable rule:line-length
 
 - name: 'Enrollment | check enrollment status'
-  ansible.builtin.command: '{{ secure_boot_role_mokutil }} --test-key {{ _secure_boot_public }}'
+  ansible.builtin.command:
+    argv:
+      - '{{ secure_boot_role_mokutil }}'
+      - '--test-key'
+      - '{{ _secure_boot_public }}'
   register: _secure_boot_enrollment_status
   failed_when: _secure_boot_enrollment_status.rc > 1
   changed_when: false
@@ -42,7 +46,11 @@
         _secure_boot_enrolled: true
 
     - name: 'Enrollment | new key | set MOK manager timeout'
-      ansible.builtin.command: '{{ secure_boot_role_mokutil }} --timeout {{ secure_boot_manager_timeout }}'
+      ansible.builtin.command:
+        argv:
+          - '{{ secure_boot_role_mokutil }}'
+          - '--timeout'
+          - '{{ secure_boot_manager_timeout }}'
       changed_when: true
 
     - name: 'Enrollment | new key | touch hash file'
@@ -54,7 +62,13 @@
         mode: '0600'
 
     - name: 'Enrollment | new key | enroll {{ _secure_boot_public }}'
-      ansible.builtin.command: '{{ secure_boot_role_mokutil }} --import {{ _secure_boot_public }} --hash-file {{ secure_boot_role_tmp_hash }}'
+      ansible.builtin.command:
+        argv:
+          - '{{ secure_boot_role_mokutil }}'
+          - '--import'
+          - '{{ _secure_boot_public }}'
+          - '--hash-file'
+          - '{{ secure_boot_role_tmp_hash }}'
       become: true
       register: _secure_boot_mok_import
       changed_when: true

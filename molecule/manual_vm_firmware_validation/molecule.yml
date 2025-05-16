@@ -1,11 +1,17 @@
 ---
 # yamllint disable rule:line-length
-#
-# Test secure boot firmware changes (manual)
-#
+###############################################################################
+# Manual VM Firmware Validation
+###############################################################################
 # Secure boot changes explicitly require interactive steps so testing requires
 # manual interactions for confirming tests. VM images do not have EFI setup by
 # default.
+#
+# State:
+# * pre-enrolled keys? False.
+# * pre-enabled secure boot? False.
+#
+# Test secure boot firmware changes (manual):
 #
 # * Create a manual VM with EFI, certificates loaded but secure boot disabled.
 # * Update VM IP for test
@@ -14,8 +20,13 @@
 #     molecule converge -s manual_vm_firmware_validation -- -v -e 'secure_boot_manual_testing_enable=true'
 #
 # * will run until 'Signature validation | enable' (secure boot only enabled
-#   outside of VM)
-# * kill test; reboot VM and confirm MOK manager appears on next boot
+#   outside of VM).
+# * kill test; reboot VM and confirm MOK manager appears on next boot.
+#
+# Tests:
+# * Manually verify MOK manager appears on next VM boot.
+# yamllint enable rule:line-length
+
 dependency:
   name: 'galaxy'
 driver:
@@ -24,13 +35,16 @@ provisioner:
   name: 'ansible'
   config_options:
     defaults:
-      interpreter_python: 'auto_silent'  # suppress warnings
-      callback_whitelist: 'profile_tasks, timer, yaml'  # output profiling info
+      interpreter_python: 'auto_silent'
+      callback_whitelist: 'profile_tasks, timer, yaml'
   inventory:
     group_vars:
       all:
         ansible_ssh_user: 'root'
-        ansible_ssh_private_key_file: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/id.key'
+        ansible_ssh_private_key_file: '{{
+            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
+            "/molecule/cache/id.key"
+          }}'
         secure_boot_password: 'ValidPassword'
         secure_boot_manual_testing_enable: false
 platforms:

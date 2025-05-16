@@ -11,7 +11,7 @@
 - name: 'Reboot'
   when: _secure_boot_enrolled or _secure_boot_validation
   block:
-    - name: 'Reboot | ACTION REQUIRED'
+    - name: 'Reboot | ACTION REQUIRED ⚠'
       ansible.builtin.debug:
         msg: |
           Secure boot changes have been staged:
@@ -20,15 +20,15 @@
 
           MokManager will appear on boot; use secure_boot_password.
 
-          ACTION REQUIRED:
+          ⚠ ACTION REQUIRED:
 
             Enroll MOK > Continue > Enroll the keys(s)? > Yes
 
-    - name: 'Reboot | HALT'
+    - name: 'Reboot | HALT ⚠'
       when: secure_boot_halt_enable
       ansible.builtin.fail:
         msg: |
-          ROLE HALTED for manual interaction.
+          ⚠ ROLE HALTED for manual interaction.
 
           Set secure_boot_halt_enable=false to disable this.
 

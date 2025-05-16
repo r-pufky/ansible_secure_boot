@@ -1,7 +1,7 @@
 ---
 - name: 'Install packages'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.apt'
+    name: 'r_pufky.deb.apt'
   vars:
     apt_packages:
       - '{{ secure_boot_role_packages }}'
