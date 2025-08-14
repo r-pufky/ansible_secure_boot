@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # Manual VM Firmware Validation
 ###############################################################################
@@ -17,7 +16,8 @@
 # * Update VM IP for test
 # * Set secure_boot_manual_testing_enable=true to test live API commands.
 #
-#     molecule converge -s manual_vm_firmware_validation -- -v -e 'secure_boot_manual_testing_enable=true'
+#     molecule converge -s manual_vm_firmware_validation -- \
+#         -v -e 'secure_boot_manual_testing_enable=true'
 #
 # * will run until 'Signature validation | enable' (secure boot only enabled
 #   outside of VM).

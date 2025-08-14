@@ -1,19 +1,19 @@
 ---
-- name: 'No actions | verify'
+- name: 'Verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'No actions | verify | query mokutil log'
+    - name: 'Verify | query mokutil log'
       ansible.builtin.slurp:
         path: '/tmp/mokutil.log'
       register: _test_secure_boot_mokutil_log
 
-    - name: 'No actions | verify | parse mokutil log'
+    - name: 'Verify | parse mokutil log'
       ansible.builtin.set_fact:
         _test_secure_boot_log:
           '{{ _test_secure_boot_mokutil_log.content | b64decode }}'
 
-    - name: 'No actions | verify | assert secure boot options toggled'
+    - name: 'Verify | assert secure boot options toggled'
       ansible.builtin.assert:
         quiet: true
         that:

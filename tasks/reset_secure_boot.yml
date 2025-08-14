@@ -29,13 +29,16 @@
     - name: 'Reset secure boot | ACTION REQUIRED ⚠'
       ansible.builtin.debug:
         msg: |
-          Secure boot user keys have been cleared.
-
-          MokManager will appear on boot; use secure_boot_password.
-
-          ⚠ ACTION REQUIRED:
-
-            Reset MOK > Erase all stored keys in MokList? > Yes
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │                          ACTION REQUIRED                          │
+          │                                                                   │
+          │        Reset MOK → Erase all stored keys in MokList? → Yes        │
+          │                                                                   │
+          │ * Secure boot user keys have been cleared.                        │
+          │ * MokManager will appear on boot; use secure_boot_password.       │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯
 
     - name: 'Reset secure boot | REBOOT'
       when: >
@@ -48,9 +51,14 @@
       when: secure_boot_halt_enable
       ansible.builtin.fail:
         msg: |
-          ⚠ ROLE HALTED for manual interaction.
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │                ROLE HALTED for manual interaction.                │
+          │                                                                   │
+          │        Set secure_boot_halt_enable=false to disable this.         │
+          │                                                                   │
+          ╰───────────────────────────────────────────────────────────────────╯
 
-          Set secure_boot_halt_enable=false to disable this.
   always:
     - name: 'Reset| remove hash file'
       ansible.builtin.file:

@@ -11,25 +11,24 @@
 # * https://superuser.com/questions/226192/avoid-password-prompt-for-keys-and-prompts-for-dn-information
 # yamllint enable rule:line-length
 
-- name: 'No actions | prepare'
+- name: 'Prepare'
   hosts: 127.0.0.1
   connection: local
   gather_facts: false
   tasks:
-
-    - name: 'No actions | prepare | generate cache location'
+    - name: 'Prepare | generate cache location'
       ansible.builtin.set_fact:
         _test_cache:
           '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
 
-    - name: 'No actions | prepare | cache'
+    - name: 'Prepare | cache'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'create_cache.yml'
       vars:
-        test_name: 'No actions | prepare | cache'
+        test_name: 'Prepare | cache'
 
-    - name: 'No actions | prepare | generate test certificate'
+    - name: 'Prepare | generate test certificate'
       ansible.builtin.command:
         argv:
           - 'openssl'
@@ -51,7 +50,7 @@
           - '{{ _test_cache }}/mok.der'
         creates: '{{ _test_cache }}/mok.key'
 
-    - name: 'No actions | prepare | sign test certificate'
+    - name: 'Prepare | sign test certificate'
       ansible.builtin.command:
         argv:
           - 'openssl'

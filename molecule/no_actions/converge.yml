@@ -1,9 +1,9 @@
 ---
-- name: 'No actions | converge'
+- name: 'Converge'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'No actions | converge | inject mock mokutil'
+    - name: 'Converge | inject mock mokutil'
       ansible.builtin.template:
         src: '{{
             lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
@@ -26,7 +26,7 @@
         state: 'directory'
         recurse: true
 
-    - name: 'No actions | converge | inject mock mok.key'
+    - name: 'Converge | inject mock mok.key'
       ansible.builtin.copy:
         src: '{{
             lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
@@ -37,7 +37,7 @@
         group: 'root'
         mode: '0400'
 
-    - name: 'No actions | converge | inject mock mok.key'
+    - name: 'Converge | inject mock mok.key'
       ansible.builtin.copy:
         src: '{{
             lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
@@ -48,7 +48,7 @@
         group: 'root'
         mode: '0644'
 
-    - name: 'No actions | converge | apply r_pufky.deb.secure_boot'
+    - name: 'Converge | apply r_pufky.deb.secure_boot'
       ansible.builtin.include_role:
         name: 'r_pufky.deb.secure_boot'
       vars:

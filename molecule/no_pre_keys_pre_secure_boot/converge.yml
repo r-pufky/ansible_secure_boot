@@ -1,9 +1,9 @@
 ---
-- name: 'No pre-keys pre secure boot | converge'
+- name: 'Converge'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'No pre-keys pre secure boot | converge | inject mock mokutil'
+    - name: 'Converge | inject mock mokutil'
       ansible.builtin.template:
         src: '{{
             lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
@@ -18,7 +18,7 @@
         test_test_key: false
 
     - name: >
-        No pre-keys pre secure boot | converge |
+        Converge |
         apply r_pufky.deb.secure_boot
       ansible.builtin.include_role:
         name: 'r_pufky.deb.secure_boot'

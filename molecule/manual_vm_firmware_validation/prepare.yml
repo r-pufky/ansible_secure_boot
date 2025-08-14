@@ -1,28 +1,27 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # Prepare
 ###############################################################################
 # Testing requires ansible public keys. Generate keys for testing.
 
-- name: 'Manual VM firmware validation | prepare'
+- name: 'Prepare'
   hosts: 127.0.0.1
   connection: local
   gather_facts: false
   tasks:
-    - name: 'Manual VM firmware validation | prepare | generate cache location'
+    - name: 'Prepare | generate cache location'
       ansible.builtin.set_fact:
         _test_cache:
           '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
 
-    - name: 'Manual VM firmware validation | prepare | cache'
+    - name: 'Prepare | cache'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'create_cache.yml'
       vars:
-        test_name: 'Manual VM firmware validation | prepare | cache'
+        test_name: 'Prepare | cache'
 
-    - name: 'Manual VM firmware validation | prepare | generate test ssh keys'
+    - name: 'Prepare | generate test ssh keys'
       ansible.builtin.command:
         argv:
           - 'ssh-keygen'
@@ -36,17 +35,3 @@
           - '-N'
           - '""'
         creates: '{{ _test_cache }}/id'
-
-- name: 'Manual VM firmware validation | prepare'
-  hosts: 'all'
-  gather_facts: false
-  tasks:
-    - name: 'Manual VM firmware validation | prepare | TESTING NOT ENABLED ⚠'
-      when: not secure_boot_manual_testing_enable
-      ansible.builtin.debug:
-        msg: |
-          ⚠ TEST WILL NOT EXECUTE UNLESS IT IS EXPLICITLY ENABLED.
-
-          Set secure_boot_manual_testing_enable=true to test live API commands.
-
-            molecule converge -s manual_vm_firmware_validation -- -v -e 'secure_boot_manual_testing_enable=true'
