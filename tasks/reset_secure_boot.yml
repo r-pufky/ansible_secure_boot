@@ -33,12 +33,12 @@
           │                                                                   │
           │                          ACTION REQUIRED                          │
           │                                                                   │
-          │        Reset MOK → Erase all stored keys in MokList? → Yes        │
-          │                                                                   │
-          │ * Secure boot user keys have been cleared.                        │
-          │ * MokManager will appear on boot; use secure_boot_password.       │
-          │                                                                   │
-          ╰───────────────────────────────────────────────────────────────────╯
+          ├───────────────────────────────────────────────────────────────────╯
+          │
+          │        Reset MOK → Erase all stored keys in MokList? → Yes
+          │
+          │ * Secure boot user keys have been cleared.
+          │ * MokManager will appear on boot; use secure_boot_password.
 
     - name: 'Reset secure boot | REBOOT'
       when: >
@@ -55,9 +55,8 @@
           │                                                                   │
           │                ROLE HALTED for manual interaction.                │
           │                                                                   │
-          │        Set secure_boot_halt_enable=false to disable this.         │
-          │                                                                   │
-          ╰───────────────────────────────────────────────────────────────────╯
+          ├───────────────────────────────────────────────────────────────────╯
+          │ Set secure_boot_halt_enable=false to disable this.
 
   always:
     - name: 'Reset| remove hash file'

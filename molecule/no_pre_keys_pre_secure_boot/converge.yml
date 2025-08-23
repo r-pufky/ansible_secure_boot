@@ -23,7 +23,7 @@
       ansible.builtin.include_role:
         name: 'r_pufky.deb.secure_boot'
       vars:
-        # remove mokutil package from install
+        # Remove mokutil package from install.
         secure_boot_role_packages:
           - 'openssl'
           - 'dkms'

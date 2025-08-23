@@ -9,18 +9,19 @@
       ansible.builtin.debug:
         msg: |
           ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
           │      TEST WILL NOT EXECUTE UNLESS IT IS EXPLICITLY ENABLED.       │
           │                                                                   │
-          │ Enable live API commands:                                         │
-          │                                                                   │
-          │   secure_boot_manual_testing_enable=true                          │
-          │                                                                   │
-          │ Example:                                                          │
-          │                                                                   │
-          │   molecule converge -s manual_vm_firmware_validation -- -v -e \   │
-          │       'secure_boot_manual_testing_enable=true'                    │
-          │                                                                   │
-          ╰───────────────────────────────────────────────────────────────────╯
+          ├───────────────────────────────────────────────────────────────────╯
+          │ Enable live API commands:
+          │
+          │   secure_boot_manual_testing_enable=true
+          │
+          │ Example:
+          │
+          │   molecule converge -s manual_vm_firmware_validation -- -v -e \
+          │       'secure_boot_manual_testing_enable=true'
+          │
 
     - name: 'Converge | apply r_pufky.deb.secure_boot'
       when: secure_boot_manual_testing_enable

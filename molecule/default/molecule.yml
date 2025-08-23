@@ -32,8 +32,8 @@ provisioner:
         secure_boot_testing_enable: true
         secure_boot_password: 'ValidPassword'
 platforms:
-  - name: 'secure_boot-debian-12-default'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'secure_boot-debian-13-default'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'

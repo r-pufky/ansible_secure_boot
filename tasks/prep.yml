@@ -25,11 +25,15 @@
   ansible.builtin.assert:
     quiet: true
     that:
-      - secure_boot_password | length >= 8
-      - secure_boot_password | length <= 16
-      - secure_boot_password is regex('^[a-zA-Z0-9]+$')
-    fail_msg: >
-      secure_boot_password must be between 8-16 alphanumeric characters.
+      - 'secure_boot_password | length >= 8'
+      - 'secure_boot_password | length <= 16'
+      - 'secure_boot_password is regex("^[a-zA-Z0-9]+$")'
+    fail_msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │    secure_boot_password must be 8-16 alphanumeric characters.     │
+      │                                                                   │
+      ╰───────────────────────────────────────────────────────────────────╯
 
 # Same hash is needed for all operations done within a reboot.
 - name: 'Prep | generate password hash'
@@ -39,7 +43,7 @@
       - '--generate-hash={{ secure_boot_password }}'
   register: _secure_boot_password_hash
   changed_when: false
-  # no_log: true  # passwords
+  # no_log: true  # Passwords.
 
 - name: 'Prep | generate locations'
   ansible.builtin.set_fact:

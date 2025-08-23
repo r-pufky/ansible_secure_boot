@@ -4,8 +4,8 @@
 ###############################################################################
 
 # Last time github options were validated against a default configuration.
-secure_boot_role_validate_date: '2025-01-02'
-secure_boot_role_validate_release: 'bookworm'
+secure_boot_role_validate_date: '2025-08-22'
+secure_boot_role_validate_release: 'trixie'
 
 # mokutil binary
 secure_boot_role_mokutil: '/usr/bin/mokutil'
@@ -18,9 +18,9 @@ secure_boot_role_tmp_hash: '/tmp/.mokhash'
 ###############################################################################
 
 secure_boot_role_packages:
-  - 'mokutil'  # MOK enrollment
-  - 'openssl'  # MOK key generation
-  - 'dkms'  # to load MOK key for any future DKMS actions
+  - 'mokutil'  # MOK enrollment.
+  - 'openssl'  # MOK key generation.
+  - 'dkms'  # To load MOK key for any future DKMS actions.
 
 ###############################################################################
 # MOK Key Generation

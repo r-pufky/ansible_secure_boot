@@ -33,7 +33,7 @@
 # the exact **character** at that position and not the entire password itself.
 #
 # Special Case:
-#   * Must be between 8-16 alphanumeric characters
+#   * Must be between 8-16 alphanumeric characters.
 #
 # Default: ''.
 secure_boot_password: ''
@@ -65,7 +65,7 @@ secure_boot_reset: false
 # request.
 #
 # Special Case:
-#   -1: infinite.
+#   -1: Infinite.
 #
 # Default: -1 (infinite).
 secure_boot_manager_timeout: -1
@@ -97,8 +97,8 @@ secure_boot_halt_enable: false
 # Use vault.
 #
 # Values:
-#    *: custom MOK certificate data - secure_boot_location/ansible_mok.pub
-#   '': use pre-generated MOK certificate data - secure_boot_location/mok.pub
+#    *: Custom MOK certificate data - secure_boot_location/ansible_mok.pub.
+#   '': Use pre-generated MOK certificate data - secure_boot_location/mok.pub.
 #
 # Default: '' (use pre-generated key).
 secure_boot_public: ''

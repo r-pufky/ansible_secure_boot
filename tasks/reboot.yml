@@ -11,17 +11,6 @@
 - name: 'Reboot'
   when: _secure_boot_enrolled or _secure_boot_validation
   block:
-    - name: 'Reboot | parse messaging'
-      ansible.builtin.set_fact:
-        _secure_boot_keys_msg: '{{
-            _secure_boot_enrolled ~
-            (44 - (_secure_boot_enrolled | lower | length)) * " "
-          }}'
-        _secure_boot_validation_msg: '{{
-            _secure_boot_validation ~
-            (33 - (_secure_boot_validation | lower | length)) * " "
-          }}'
-
     - name: 'Reboot | ACTION REQUIRED ⚠'
       ansible.builtin.debug:
         msg: |
@@ -29,15 +18,15 @@
           │                                                                   │
           │                          ACTION REQUIRED                          │
           │                                                                   │
-          │         Enroll MOK → Continue → Enroll the keys(s)? → Yes         │
-          │                                                                   │
-          │ MokManager will appear on boot - use secure_boot_password.        │
-          │                                                                   │
-          │ Secure boot changes have been staged:                             │
-          │ * New keys enrolled: {{ _secure_boot_keys_msg }} │
-          │ * Signature validation changed: {{ _secure_boot_validation_msg }} │
-          │                                                                   │
-          ╰───────────────────────────────────────────────────────────────────╯
+          ├───────────────────────────────────────────────────────────────────╯
+          │
+          │         Enroll MOK → Continue → Enroll the keys(s)? → Yes
+          │
+          │ MokManager will appear on boot - use secure_boot_password.
+          │
+          │ Secure boot changes have been staged:
+          │ * New keys enrolled: {{ _secure_boot_enrolled }}
+          │ * Signature validation changed: {{ _secure_boot_validation }}
 
     - name: 'Reboot | HALT ⚠'
       when: secure_boot_halt_enable
@@ -47,9 +36,8 @@
           │                                                                   │
           │                ROLE HALTED for manual interaction.                │
           │                                                                   │
-          │        Set secure_boot_halt_enable=false to disable this.         │
-          │                                                                   │
-          ╰───────────────────────────────────────────────────────────────────╯
+          ├───────────────────────────────────────────────────────────────────╯
+          │ Set secure_boot_halt_enable=false to disable this.
 
     - name: 'Enrollment | REBOOT'
       when: >

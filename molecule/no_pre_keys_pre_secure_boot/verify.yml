@@ -22,10 +22,14 @@
           - '"--reset" not in _test_secure_boot_log'
           - '"--import" in _test_secure_boot_log'
           - '"--enable-validation" not in _test_secure_boot_log'
-        fail_msg: >
-          ✘ mokutil should have the following call log:
-            --generate-hash=ValidPassword
-            --sb-state
-            --test-key /var/lib/dkms/mok.pub
-            --timeout -1
-            --import /var/lib/dkms/mok.pub --hash-file /tmp/.mokhash
+        fail_msg: |
+          ╭───────────────────────────────────────────────────────────────────╮
+          │                                                                   │
+          │            mokutil should have the following call log:            │
+          │                                                                   │
+          ├───────────────────────────────────────────────────────────────────╯
+          │ --generate-hash=ValidPassword
+          │ --sb-state
+          │ --test-key /var/lib/dkms/mok.pub
+          │ --timeout -1
+          │ --import /var/lib/dkms/mok.pub --hash-file /tmp/.mokhash
