@@ -35,7 +35,7 @@
           │                                                                   │
           ├───────────────────────────────────────────────────────────────────╯
           │
-          │        Reset MOK → Erase all stored keys in MokList? → Yes
+          │        Reset MOK ➔ Erase all stored keys in MokList? ➔ Yes
           │
           │ * Secure boot user keys have been cleared.
           │ * MokManager will appear on boot; use secure_boot_password.
