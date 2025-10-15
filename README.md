@@ -30,7 +30,7 @@ Machine is rebooted **only** if there are changes to secure boot;
 `secure_boot_password` is needed at the physical console to confirm.
 
 ## Development
-Configure [environment](https://github.com/r-pufky/ansible_collection_docs/blob/main/dev/environment/README.md)
+Configure [environment](https://github.com/r-pufky/ansible_collection_docs/blob/main/ansible/environment.md)
 
 Run all unit tests:
 ``` bash
