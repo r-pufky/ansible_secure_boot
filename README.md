@@ -13,7 +13,8 @@ Secure boot management.
 
 ## Example Playbook
 This will install MOK (Machine Owner Keys) and enable secure booting for
-machines. A [high-level understanding of secure boot is required](https://github.com/r-pufky/ansible_secure_boot/blob/main/docs/README.md).
+machines. A
+[high-level understanding of secure boot is required](http://r-pufky.github.io/r-pufky/docs/service/secure_boot).
 
 No additional management of DKMS. If custom MOK keys are used, it is the user's
 responsibility to update the DKMS configuration to locate those keys.
